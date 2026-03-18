@@ -51,6 +51,9 @@ def order():
     menu_data = current_app.config["MENU_ITEMS"]
     bagel_prices = _bagel_price_map(menu_data)
 
+    bagel_choices = form.bagel_choices
+    bagel_choices_for_js = [{"value": v, "label": l} for v, l in bagel_choices if v]
+
     preview_items = build_order_items(form.data, menu_data)
     preview_total = calculate_total(preview_items)
 
@@ -70,6 +73,7 @@ def order():
                 preview_items=items,
                 preview_total=total,
                 bagel_prices=bagel_prices,
+                bagel_choices=bagel_choices_for_js,
             )
 
         order_obj = create_order(form, items, total)
@@ -84,6 +88,7 @@ def order():
         preview_items=preview_items,
         preview_total=preview_total,
         bagel_prices=bagel_prices,
+        bagel_choices=bagel_choices_for_js,
     )
 
 

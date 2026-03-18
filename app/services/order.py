@@ -52,12 +52,19 @@ def build_order_items(form_data: dict, menu_data: dict) -> list[dict]:
     items = []
     price_lookup = _build_price_lookup(menu_data)
 
-    for index in [1, 2, 3]:
-        bagel_qty = int(form_data.get(f"bagel_{index}_qty", 0) or 0)
+    try:
+        bagel_rows = json.loads(form_data.get("bagel_rows_json", "[]") or "[]")
+        if not isinstance(bagel_rows, list):
+            bagel_rows = []
+    except (ValueError, TypeError):
+        bagel_rows = []
+
+    for row in bagel_rows:
+        bagel_qty = int(row.get("qty", 0) or 0)
         if bagel_qty <= 0:
             continue
-        bagel_type = form_data.get(f"bagel_{index}_type", "Bagel")
-        bread = form_data.get(f"bagel_{index}_bread", "")
+        bagel_type = row.get("type", "Bagel") or "Bagel"
+        bread = row.get("bread", "") or ""
         option_text = (
             f"Typ: {bagel_type}, Brot: {bread}"
             if bread

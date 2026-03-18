@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 
 from flask import current_app
@@ -6,6 +7,7 @@ from wtforms import (
     BooleanField,
     DateField,
     EmailField,
+    HiddenField,
     IntegerField,
     SelectField,
     StringField,
@@ -60,57 +62,7 @@ class CateringOrderForm(FlaskForm):
         "Besondere Wünsche / Allergene",
         validators=[Optional(), Length(max=2000)],
     )
-    bagel_1_qty = IntegerField(
-        "Bagel-Auswahl 1 · Anzahl",
-        default=0,
-        validators=[NumberRange(min=0, max=200)],
-    )
-    bagel_1_type = SelectField("Bagel-Auswahl 1 · Typ", choices=[], validators=[Optional()])
-    bagel_1_bread = SelectField(
-        "Bagel-Auswahl 1 · Brot",
-        choices=[
-            ("", "Bitte wählen"),
-            ("Sesam", "Sesam"),
-            ("Lauge", "Lauge"),
-            ("Mohn", "Mohn"),
-            ("Gemischt", "Gemischt"),
-        ],
-        validators=[Optional()],
-    )
-    bagel_2_qty = IntegerField(
-        "Bagel-Auswahl 2 · Anzahl",
-        default=0,
-        validators=[NumberRange(min=0, max=200)],
-    )
-    bagel_2_type = SelectField("Bagel-Auswahl 2 · Typ", choices=[], validators=[Optional()])
-    bagel_2_bread = SelectField(
-        "Bagel-Auswahl 2 · Brot",
-        choices=[
-            ("", "Bitte wählen"),
-            ("Sesam", "Sesam"),
-            ("Lauge", "Lauge"),
-            ("Mohn", "Mohn"),
-            ("Gemischt", "Gemischt"),
-        ],
-        validators=[Optional()],
-    )
-    bagel_3_qty = IntegerField(
-        "Bagel-Auswahl 3 · Anzahl",
-        default=0,
-        validators=[NumberRange(min=0, max=200)],
-    )
-    bagel_3_type = SelectField("Bagel-Auswahl 3 · Typ", choices=[], validators=[Optional()])
-    bagel_3_bread = SelectField(
-        "Bagel-Auswahl 3 · Brot",
-        choices=[
-            ("", "Bitte wählen"),
-            ("Sesam", "Sesam"),
-            ("Lauge", "Lauge"),
-            ("Mohn", "Mohn"),
-            ("Gemischt", "Gemischt"),
-        ],
-        validators=[Optional()],
-    )
+    bagel_rows_json = HiddenField("Bagel-Auswahl (JSON)", default="[]")
     zimtschnecke_qty = IntegerField(
         "Zimtschnecken (Anzahl)",
         default=0,
@@ -144,12 +96,9 @@ class CateringOrderForm(FlaskForm):
                 if "Auswahl" in item_name or item_name.startswith("Extra"):
                     continue
                 bagel_names.append(item_name)
-        bagel_choices = [("", "Bitte wählen")] + [
+        self.bagel_choices = [("", "Bitte wählen")] + [
             (name, name) for name in bagel_names
         ]
-        self.bagel_1_type.choices = bagel_choices
-        self.bagel_2_type.choices = bagel_choices
-        self.bagel_3_type.choices = bagel_choices
 
     def validate_pickup_date(self, field):
         earliest = datetime.now() + timedelta(hours=current_app.config["LEAD_TIME_HOURS"])
@@ -167,36 +116,39 @@ class CateringOrderForm(FlaskForm):
             self.agb_accepted.errors.append("Bitte akzeptieren Sie die AGB.")
             return False
 
-        bagel_total = (
-            (self.bagel_1_qty.data or 0)
-            + (self.bagel_2_qty.data or 0)
-            + (self.bagel_3_qty.data or 0)
-        )
-        total_qty = bagel_total + (self.zimtschnecke_qty.data or 0) + (self.kuchen_qty.data or 0)
+        try:
+            bagel_rows = json.loads(self.bagel_rows_json.data or "[]")
+            if not isinstance(bagel_rows, list):
+                raise ValueError
+        except (ValueError, TypeError):
+            self.bagel_rows_json.errors.append("Ungültige Bagel-Daten.")
+            return False
+
+        bagel_total = 0
+        for row in bagel_rows:
+            qty = int(row.get("qty", 0) or 0)
+            if qty <= 0:
+                continue
+            if not row.get("type"):
+                self.bagel_rows_json.errors.append("Bitte einen Bagel-Typ auswählen.")
+                return False
+            if not row.get("bread"):
+                self.bagel_rows_json.errors.append("Bitte eine Bagel-Brotart auswählen.")
+                return False
+            bagel_total += qty
+
+        zimtschnecke_qty = int(self.zimtschnecke_qty.data or 0)
+        kuchen_qty = int(self.kuchen_qty.data or 0)
+        total_qty = bagel_total + zimtschnecke_qty + kuchen_qty
         if total_qty <= 0:
             self.submit.errors.append("Bitte wählen Sie mindestens einen Catering-Artikel aus.")
             return False
 
-        bagel_rows = [
-            (self.bagel_1_qty, self.bagel_1_type, self.bagel_1_bread),
-            (self.bagel_2_qty, self.bagel_2_type, self.bagel_2_bread),
-            (self.bagel_3_qty, self.bagel_3_type, self.bagel_3_bread),
-        ]
-        for qty_field, type_field, bread_field in bagel_rows:
-            if (qty_field.data or 0) <= 0:
-                continue
-            if not type_field.data:
-                type_field.errors.append("Bitte einen Bagel-Typ auswählen.")
-                return False
-            if not bread_field.data:
-                bread_field.errors.append("Bitte eine Bagel-Brotart auswählen.")
-                return False
-
-        if (self.zimtschnecke_qty.data or 0) > 0 and not self.zimtschnecke_type.data:
+        if zimtschnecke_qty > 0 and not self.zimtschnecke_type.data:
             self.zimtschnecke_type.errors.append("Bitte den Zimtschnecken-Typ angeben.")
             return False
 
-        if (self.kuchen_qty.data or 0) > 0 and not self.kuchen_type.data:
+        if kuchen_qty > 0 and not self.kuchen_type.data:
             self.kuchen_type.errors.append("Bitte den Kuchen-Typ angeben.")
             return False
 
