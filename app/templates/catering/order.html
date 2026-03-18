@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="max-w-6xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-semibold text-coffee">Catering bestellen</h1>
+    <p class="mt-2 text-stone-700">Bitte füllen Sie alle Pflichtfelder aus. Es handelt sich um eine Abholbestellung.</p>
+
+    <form method="post" class="mt-8 grid lg:grid-cols-3 gap-8">
+        {{ form.hidden_tag() }}
+
+        <div class="lg:col-span-2 space-y-6">
+            <section class="bg-white border border-stone-200 rounded-2xl p-6">
+                <h2 class="text-xl font-semibold mb-4">Kontaktdaten</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm">{{ form.customer_name.label }}</label>
+                        {{ form.customer_name(class_='mt-1 w-full border rounded-lg px-3 py-2') }}
+                        {% for e in form.customer_name.errors %}<p class="text-red-700 text-sm">{{ e }}</p>{% endfor %}
+                    </div>
+                    <div>
+                        <label class="text-sm">{{ form.company.label }}</label>
+                        {{ form.company(class_='mt-1 w-full border rounded-lg px-3 py-2') }}
+                    </div>
+                    <div>
+                        <label class="text-sm">{{ form.email.label }}</label>
+                        {{ form.email(class_='mt-1 w-full border rounded-lg px-3 py-2') }}
+                        {% for e in form.email.errors %}<p class="text-red-700 text-sm">{{ e }}</p>{% endfor %}
+                    </div>
+                    <div>
+                        <label class="text-sm">{{ form.phone.label }}</label>
+                        {{ form.phone(class_='mt-1 w-full border rounded-lg px-3 py-2') }}
+                        {% for e in form.phone.errors %}<p class="text-red-700 text-sm">{{ e }}</p>{% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white border border-stone-200 rounded-2xl p-6">
+                <h2 class="text-xl font-semibold mb-4">Abholung</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm">{{ form.pickup_date.label }}</label>
+                        {{ form.pickup_date(class_='mt-1 w-full border rounded-lg px-3 py-2') }}
+                        {% for e in form.pickup_date.errors %}<p class="text-red-700 text-sm">{{ e }}</p>{% endfor %}
+                    </div>
+                    <div>
+                        <label class="text-sm">{{ form.pickup_time.label }}</label>
+                        {{ form.pickup_time(class_='mt-1 w-full border rounded-lg px-3 py-2') }}
+                        {% for e in form.pickup_time.errors %}<p class="text-red-700 text-sm">{{ e }}</p>{% endfor %}
+                    </div>
+                </div>
+                <p class="text-sm text-stone-600 mt-2">Nur Abholung vor Ort. Keine Lieferung. Zahlung bei Abholung.</p>
+            </section>
+
+            <section class="bg-white border border-stone-200 rounded-2xl p-6">
+                <h2 class="text-xl font-semibold mb-4">Positionen</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <label class="text-sm">{{ form.bagel_mix_qty.label }}{{ form.bagel_mix_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.bagel_veggie_qty.label }}{{ form.bagel_veggie_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.coffee_package_qty.label }}{{ form.coffee_package_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.pastry_box_qty.label }}{{ form.pastry_box_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.seasonal_option_qty.label }}{{ form.seasonal_option_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                </div>
+                {% for e in form.submit.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+            </section>
+
+            <section class="bg-white border border-stone-200 rounded-2xl p-6">
+                <h2 class="text-xl font-semibold mb-4">Hinweise</h2>
+                <label class="text-sm">{{ form.special_requests.label }}</label>
+                {{ form.special_requests(class_='mt-1 w-full border rounded-lg px-3 py-2 min-h-32') }}
+            </section>
+
+            <section class="bg-white border border-stone-200 rounded-2xl p-6">
+                <label class="flex items-start gap-3 text-sm">
+                    <input type="checkbox" name="agb_accepted" value="1" class="mt-1" {% if form.agb_accepted.data %}checked{% endif %}>
+                    <span>Ich akzeptiere die AGB und Datenschutzbedingungen für die Bearbeitung meiner Anfrage.</span>
+                </label>
+                {% for e in form.agb_accepted.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+            </section>
+
+            {{ form.submit(class_='bg-terracotta text-white px-6 py-3 rounded-lg font-medium') }}
+        </div>
+
+        <aside class="space-y-6">
+            <div class="bg-white border border-stone-200 rounded-2xl p-6">
+                <h2 class="text-xl font-semibold">Bestellübersicht</h2>
+                {% if preview_items %}
+                    <ul class="mt-4 space-y-2 text-sm">
+                        {% for item in preview_items %}
+                            <li class="flex justify-between gap-4"><span>{{ item.name }} × {{ item.qty }}</span><strong>{{ "%.2f"|format(item.line_total) }} €</strong></li>
+                        {% endfor %}
+                    </ul>
+                    <p class="mt-4 pt-4 border-t border-stone-200 flex justify-between"><span>Gesamt (geschätzt)</span><strong>{{ "%.2f"|format(preview_total) }} €</strong></p>
+                {% else %}
+                    <p class="mt-4 text-sm text-stone-600">Noch keine Positionen ausgewählt.</p>
+                {% endif %}
+            </div>
+
+            <div class="bg-stone-900 text-stone-100 rounded-2xl p-6 text-sm">
+                <p><strong>Wichtig:</strong> Kein Online-Payment. Zahlung erfolgt bei Abholung.</p>
+            </div>
+        </aside>
+    </form>
+</section>
+{% endblock %}

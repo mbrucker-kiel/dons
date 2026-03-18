@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="max-w-6xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-semibold text-coffee">Catering</h1>
+    <p class="mt-3 text-stone-700">Für Meetings, Business-Events und private Feiern. <strong>Nur Abholung im Café</strong>, keine Lieferung.</p>
+
+    <div class="mt-6 bg-white border border-stone-200 rounded-2xl p-6">
+        <ul class="space-y-2 text-stone-700">
+            <li>• Mindestbestellwert: <strong>{{ "%.2f"|format(min_order) }} €</strong></li>
+            <li>• Bitte mindestens <strong>{{ lead_time }} Stunden</strong> im Voraus bestellen</li>
+            <li>• Zahlung erfolgt bei Abholung im Café</li>
+        </ul>
+    </div>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">Catering-Menü</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for item in catering_data["items"] %}
+            <article class="bg-white rounded-2xl border border-stone-200 overflow-hidden">
+                <img src="{{ item.image }}" alt="[REPLACE WITH ACTUAL PHOTOS] {{ item.name }}" class="h-44 w-full object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg">{{ item.name }}</h3>
+                    <p class="text-stone-600 text-sm mt-1">{{ item.description }}</p>
+                    <p class="font-medium text-coffee mt-3">{{ "%.2f"|format(item.price) }} € / {{ item.unit }}</p>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+
+    <a href="{{ url_for('catering.order') }}" class="inline-block mt-8 bg-terracotta text-white px-6 py-3 rounded-lg font-medium">Jetzt Catering bestellen</a>
+</section>
+{% endblock %}

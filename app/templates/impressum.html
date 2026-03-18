@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 py-12 prose prose-stone">
+    <h1>Impressum</h1>
+    <p><strong>[MUST BE REVIEWED BY LEGAL COUNSEL]</strong></p>
+    <p>Angaben gemäß § 5 TMG / DDG:</p>
+    <p>
+        Don's Café & Bistro<br>
+        Dreieckspl. 10<br>
+        24103 Kiel
+    </p>
+    <p>Vertreten durch: [OWNER TO FILL IN]</p>
+    <p>Kontakt: Telefon {{ business.phone }}, E-Mail {{ public_contact_email }}</p>
+    <p>USt-IdNr.: [OWNER TO FILL IN]</p>
+    <p>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV: [OWNER TO FILL IN]</p>
+</section>
+{% endblock %}

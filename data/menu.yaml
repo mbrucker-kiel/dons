@@ -1,0 +1,59 @@
+categories:
+  - title: "Bagels & Sandwiches"
+    items:
+      - name: "Kieler Lachs Bagel"
+        description: "Frischkäse, Räucherlachs, rote Zwiebeln, Dill"
+        price: "8.90"
+        tags: ["pescetarisch"]
+      - name: "Veggie Garten Bagel"
+        description: "Hummus, Avocado, Gurke, Sprossen"
+        price: "7.90"
+        tags: ["vegan"]
+      - name: "Roastbeef Deluxe"
+        description: "Roastbeef, Senf-Creme, Rucola, Gewürzgurken"
+        price: "9.50"
+        tags: []
+
+  - title: "Kaffee & Heißgetränke"
+    items:
+      - name: "Espresso"
+        description: "Kräftig und aromatisch"
+        price: "2.40"
+        tags: ["vegan"]
+      - name: "Cappuccino"
+        description: "Mit feinporigem Milchschaum"
+        price: "3.60"
+        tags: ["vegetarisch"]
+      - name: "Hafermilch Latte"
+        description: "Doppio Espresso mit Hafermilch"
+        price: "4.20"
+        tags: ["vegan"]
+
+  - title: "Kaltgetränke"
+    items:
+      - name: "Hausgemachte Zitronenlimonade"
+        description: "Frisch gepresste Zitrone, Minze"
+        price: "3.90"
+        tags: ["vegan"]
+      - name: "Eiskaffee"
+        description: "Cold Brew, Eiswürfel, optional Milch"
+        price: "4.40"
+        tags: ["vegetarisch"]
+
+  - title: "Gebäck & Süßes"
+    items:
+      - name: "Cinnamon Roll"
+        description: "Hausgemacht, warm serviert"
+        price: "3.80"
+        tags: ["vegetarisch"]
+      - name: "Banana Bread"
+        description: "Saftig, mit Walnuss und Zimt"
+        price: "3.50"
+        tags: ["vegetarisch"]
+
+  - title: "Specials / Saisonales"
+    items:
+      - name: "Frühlings-Bagel"
+        description: "Ziegenkäse, Honig, karamellisierte Walnuss"
+        price: "9.20"
+        tags: ["vegetarisch"]

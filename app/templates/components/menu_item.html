@@ -1,0 +1,16 @@
+<article class="bg-white rounded-xl border border-stone-200 p-4">
+    <div class="flex justify-between gap-4 items-start">
+        <div>
+            <h3 class="font-semibold">{{ item.name }}</h3>
+            <p class="text-sm text-stone-600 mt-1">{{ item.description }}</p>
+            {% if item.tags %}
+                <div class="mt-2 flex flex-wrap gap-2">
+                    {% for tag in item.tags %}
+                        <span class="text-xs px-2 py-1 rounded-full bg-stone-100">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <p class="font-medium text-coffee whitespace-nowrap">{{ item.price }} €</p>
+    </div>
+</article>

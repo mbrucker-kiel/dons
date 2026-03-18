@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="relative">
+    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1600&q=80" alt="[REPLACE WITH ACTUAL PHOTOS] Café Interior" class="w-full h-[52vh] object-cover">
+    <div class="absolute inset-0 bg-black/35"></div>
+    <div class="absolute inset-0 max-w-6xl mx-auto px-4 flex items-center">
+        <div class="max-w-2xl text-white">
+            <p class="text-sm uppercase tracking-[0.15em]">Kiel · Bagel-Manufaktur · Café</p>
+            <h1 class="text-4xl md:text-6xl font-bold leading-tight mt-2">{{ business.tagline }}</h1>
+            <p class="mt-4 text-lg">Willkommen bei Don's Café & Bistro – frisch, lokal und mit viel Herz.</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+                <a href="{{ url_for('menu.menu') }}" class="bg-terracotta text-white px-5 py-3 rounded-lg font-medium">Speisekarte</a>
+                <a href="{{ url_for('catering.order') }}" class="bg-olive text-white px-5 py-3 rounded-lg font-medium">Catering bestellen</a>
+                <a href="{{ url_for('main.contact') }}" class="bg-white text-stone-900 px-5 py-3 rounded-lg font-medium">So finden Sie uns</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="max-w-6xl mx-auto px-4 py-14 grid lg:grid-cols-2 gap-10">
+    <div>
+        <h2 class="text-3xl font-semibold text-coffee">Willkommen im Viertelcafé</h2>
+        <p class="mt-4 leading-relaxed text-stone-700">{{ business.description }} Unser Fokus: frische Bagels, sorgfältig ausgewählte Zutaten und ein Ort, an dem man gerne zusammenkommt.</p>
+        <a href="{{ business.instagram }}" target="_blank" rel="noopener noreferrer" class="inline-block mt-5 text-terracotta font-medium underline">Instagram ansehen</a>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+        <h3 class="text-xl font-semibold mb-3">Öffnungszeiten</h3>
+        {% include "components/hours.html" %}
+    </div>
+</section>
+{% endblock %}

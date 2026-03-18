@@ -1,0 +1,8 @@
+<ul class="space-y-1 text-sm">
+    {% for day, hours in business.opening_hours.items() %}
+        <li class="flex justify-between gap-4">
+            <span>{{ day }}</span>
+            <span>{{ hours if hours != 'geschlossen' else 'Geschlossen' }}</span>
+        </li>
+    {% endfor %}
+</ul>
