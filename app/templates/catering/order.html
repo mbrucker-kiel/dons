@@ -5,7 +5,7 @@
     <h1 class="text-4xl font-semibold text-coffee">Catering bestellen</h1>
     <p class="mt-2 text-stone-700">Bitte füllen Sie alle Pflichtfelder aus. Es handelt sich um eine Abholbestellung.</p>
 
-    <form method="post" class="mt-8 grid lg:grid-cols-3 gap-8">
+    <form method="post" id="catering-order-form" class="mt-8 grid lg:grid-cols-3 gap-8">
         {{ form.hidden_tag() }}
 
         <div class="lg:col-span-2 space-y-6">
@@ -53,18 +53,39 @@
 
             <section class="bg-white border border-stone-200 rounded-2xl p-6">
                 <h2 class="text-xl font-semibold mb-4">Positionen</h2>
+                <p class="text-sm text-stone-600 mb-4">Auswahl basiert auf Ihrer Speisekarte: Bagels, Zimtschnecken und Kuchen.</p>
                 <div class="grid md:grid-cols-2 gap-4">
-                    <label class="text-sm">{{ form.bagel_mix_qty.label }}{{ form.bagel_mix_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
-                    <label class="text-sm">{{ form.bagel_veggie_qty.label }}{{ form.bagel_veggie_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
-                    <label class="text-sm">{{ form.coffee_package_qty.label }}{{ form.coffee_package_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
-                    <label class="text-sm">{{ form.pastry_box_qty.label }}{{ form.pastry_box_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
-                    <label class="text-sm">{{ form.seasonal_option_qty.label }}{{ form.seasonal_option_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.bagel_1_qty.label }}{{ form.bagel_1_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.bagel_1_type.label }}{{ form.bagel_1_type(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
+                    <label class="text-sm">{{ form.bagel_1_bread.label }}{{ form.bagel_1_bread(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
+                    <div></div>
+                    <label class="text-sm">{{ form.bagel_2_qty.label }}{{ form.bagel_2_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.bagel_2_type.label }}{{ form.bagel_2_type(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
+                    <label class="text-sm">{{ form.bagel_2_bread.label }}{{ form.bagel_2_bread(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
+                    <div></div>
+                    <label class="text-sm">{{ form.bagel_3_qty.label }}{{ form.bagel_3_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.bagel_3_type.label }}{{ form.bagel_3_type(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
+                    <label class="text-sm">{{ form.bagel_3_bread.label }}{{ form.bagel_3_bread(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
+                    <div></div>
+                    <label class="text-sm">{{ form.zimtschnecke_qty.label }}{{ form.zimtschnecke_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.zimtschnecke_type.label }}{{ form.zimtschnecke_type(class_='mt-1 w-full border rounded-lg px-3 py-2', placeholder='z. B. Classic, Pistazie, Schoko') }}</label>
+                    <label class="text-sm">{{ form.kuchen_qty.label }}{{ form.kuchen_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
+                    <label class="text-sm">{{ form.kuchen_type.label }}{{ form.kuchen_type(class_='mt-1 w-full border rounded-lg px-3 py-2', placeholder='z. B. Cheesecake, Karotte, Schoko') }}</label>
                 </div>
+                {% for e in form.bagel_1_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+                {% for e in form.bagel_1_bread.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+                {% for e in form.bagel_2_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+                {% for e in form.bagel_2_bread.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+                {% for e in form.bagel_3_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+                {% for e in form.bagel_3_bread.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+                {% for e in form.zimtschnecke_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+                {% for e in form.kuchen_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
                 {% for e in form.submit.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
             </section>
 
             <section class="bg-white border border-stone-200 rounded-2xl p-6">
                 <h2 class="text-xl font-semibold mb-4">Hinweise</h2>
+                <p class="text-sm text-stone-600 mb-2">Weitere Wünsche (z. B. Verteilung mehrerer Bagel-Typen) bitte hier eintragen.</p>
                 <label class="text-sm">{{ form.special_requests.label }}</label>
                 {{ form.special_requests(class_='mt-1 w-full border rounded-lg px-3 py-2 min-h-32') }}
             </section>
@@ -84,14 +105,16 @@
             <div class="bg-white border border-stone-200 rounded-2xl p-6">
                 <h2 class="text-xl font-semibold">Bestellübersicht</h2>
                 {% if preview_items %}
-                    <ul class="mt-4 space-y-2 text-sm">
+                    <ul id="order-summary-list" class="mt-4 space-y-2 text-sm">
                         {% for item in preview_items %}
-                            <li class="flex justify-between gap-4"><span>{{ item.name }} × {{ item.qty }}</span><strong>{{ "%.2f"|format(item.line_total) }} €</strong></li>
+                            <li class="flex justify-between gap-4"><span>{{ item.name }} × {{ item.qty }}</span><strong>{{ item.price_label }}</strong></li>
                         {% endfor %}
                     </ul>
-                    <p class="mt-4 pt-4 border-t border-stone-200 flex justify-between"><span>Gesamt (geschätzt)</span><strong>{{ "%.2f"|format(preview_total) }} €</strong></p>
+                    <p class="mt-4 pt-4 border-t border-stone-200 flex justify-between"><span>Gesamt (geschätzt)</span><strong id="order-summary-total">{{ "%.2f"|format(preview_total) }} €</strong></p>
                 {% else %}
-                    <p class="mt-4 text-sm text-stone-600">Noch keine Positionen ausgewählt.</p>
+                    <ul id="order-summary-list" class="mt-4 space-y-2 text-sm"></ul>
+                    <p id="order-summary-empty" class="mt-4 text-sm text-stone-600">Noch keine Positionen ausgewählt.</p>
+                    <p class="mt-4 pt-4 border-t border-stone-200 flex justify-between"><span>Gesamt (geschätzt)</span><strong id="order-summary-total">0.00 €</strong></p>
                 {% endif %}
             </div>
 
@@ -101,4 +124,9 @@
         </aside>
     </form>
 </section>
+<script>
+window.cateringConfig = {
+    bagelPrices: {{ bagel_prices|tojson }}
+};
+</script>
 {% endblock %}

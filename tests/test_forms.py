@@ -22,7 +22,9 @@ def test_pickup_date_in_future_required():
                 "phone": "01234",
                 "pickup_date": datetime.now().date() + timedelta(days=1),
                 "pickup_time": datetime.now().time(),
-                "bagel_mix_qty": 1,
+                "bagel_1_qty": 1,
+                "bagel_1_type": "Cheddar",
+                "bagel_1_bread": "Sesam",
                 "agb_accepted": True,
             }
         )

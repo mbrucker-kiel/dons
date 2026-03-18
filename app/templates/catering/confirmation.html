@@ -16,7 +16,7 @@
         <h2 class="text-xl font-semibold mt-8">Zusammenfassung</h2>
         <ul class="mt-3 space-y-2 text-sm">
             {% for item in items %}
-                <li class="flex justify-between"><span>{{ item.name }} × {{ item.qty }}</span><span>{{ "%.2f"|format(item.line_total) }} €</span></li>
+                <li class="flex justify-between"><span>{{ item.name }} × {{ item.qty }}</span><span>{{ item.price_label if item.price_label else "%.2f"|format(item.line_total) ~ " €" }}</span></li>
             {% endfor %}
         </ul>
         <p class="mt-4 pt-4 border-t border-stone-200 flex justify-between"><span>Gesamt (geschätzt)</span><strong>{{ "%.2f"|format(order.total_estimate) }} €</strong></p>

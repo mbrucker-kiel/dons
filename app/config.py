@@ -28,4 +28,3 @@ class Config:
 
     BUSINESS_DATA_FILE = BASE_DIR / "data" / "business.yaml"
     MENU_DATA_FILE = BASE_DIR / "data" / "menu.yaml"
-    CATERING_DATA_FILE = BASE_DIR / "data" / "catering_menu.yaml"

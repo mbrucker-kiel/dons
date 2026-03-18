@@ -24,7 +24,7 @@
                 </div>
                 <ul class="mt-4 text-sm space-y-1">
                     {% for item in items %}
-                        <li>{{ item.name }} × {{ item.qty }} — {{ "%.2f"|format(item.line_total) }} €</li>
+                        <li>{{ item.name }} × {{ item.qty }} — {{ item.price_label if item.price_label else "%.2f"|format(item.line_total) ~ " €" }}</li>
                     {% endfor %}
                 </ul>
                 <p class="mt-3 text-sm font-medium">Gesamt: {{ "%.2f"|format(order.total_estimate) }} €</p>

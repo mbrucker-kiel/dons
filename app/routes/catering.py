@@ -10,12 +10,36 @@ from app.services.order import build_order_items, calculate_total, create_order,
 catering_bp = Blueprint("catering", __name__, url_prefix="/catering")
 
 
+def _parse_price(value):
+    if value is None:
+        return None
+    text = str(value).strip().replace("€", "").replace(",", ".").replace("+", "")
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def _bagel_price_map(menu_data: dict) -> dict[str, float]:
+    prices: dict[str, float] = {}
+    for category in menu_data.get("categories", []):
+        if category.get("title") != "Bagels & Sandwiches":
+            continue
+        for item in category.get("items", []):
+            name = item.get("name", "")
+            if "Auswahl" in name or name.startswith("Extra"):
+                continue
+            parsed = _parse_price(item.get("price"))
+            if parsed is not None:
+                prices[name] = parsed
+    return prices
+
+
 @catering_bp.get("")
 def catering():
     return render_template(
         "catering/index.html",
         page_title="Catering",
-        catering_data=current_app.config["CATERING_MENU_ITEMS"],
         min_order=current_app.config["MIN_ORDER_AMOUNT"],
         lead_time=current_app.config["LEAD_TIME_HOURS"],
     )
@@ -24,16 +48,17 @@ def catering():
 @catering_bp.route("/bestellen", methods=["GET", "POST"])
 def order():
     form = CateringOrderForm()
-    catering_data = current_app.config["CATERING_MENU_ITEMS"]
+    menu_data = current_app.config["MENU_ITEMS"]
+    bagel_prices = _bagel_price_map(menu_data)
 
-    preview_items = build_order_items(form.data, catering_data)
+    preview_items = build_order_items(form.data, menu_data)
     preview_total = calculate_total(preview_items)
 
     if form.validate_on_submit():
-        items = build_order_items(form.data, catering_data)
+        items = build_order_items(form.data, menu_data)
         total = calculate_total(items)
 
-        if total < current_app.config["MIN_ORDER_AMOUNT"]:
+        if 0 < total < current_app.config["MIN_ORDER_AMOUNT"]:
             flash(
                 f"Der Mindestbestellwert beträgt {current_app.config['MIN_ORDER_AMOUNT']:.2f} €.",
                 "error",
@@ -42,9 +67,9 @@ def order():
                 "catering/order.html",
                 page_title="Catering bestellen",
                 form=form,
-                catering_data=catering_data,
                 preview_items=items,
                 preview_total=total,
+                bagel_prices=bagel_prices,
             )
 
         order_obj = create_order(form, items, total)
@@ -56,9 +81,9 @@ def order():
         "catering/order.html",
         page_title="Catering bestellen",
         form=form,
-        catering_data=catering_data,
         preview_items=preview_items,
         preview_total=preview_total,
+        bagel_prices=bagel_prices,
     )
 
 

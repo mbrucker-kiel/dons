@@ -5,6 +5,11 @@
     <h1 class="text-4xl font-semibold text-coffee">Speisekarte</h1>
     <p class="text-stone-600 mt-2">Unsere aktuelle Auswahl – regelmäßig aktualisiert.</p>
 
+    <div class="mt-6 grid md:grid-cols-2 gap-4">
+        <img src="{{ url_for('static', filename='images/bagelSet.jpg') }}" alt="Bagel-Auswahl" class="h-56 w-full object-cover rounded-2xl border border-stone-200">
+        <img src="{{ url_for('static', filename='images/zimtschnecken.jpg') }}" alt="Zimtschnecken" class="h-56 w-full object-cover rounded-2xl border border-stone-200">
+    </div>
+
     <div class="mt-10 space-y-10">
         {% for category in menu_data.categories %}
             <section>

@@ -1,59 +1,135 @@
 categories:
   - title: "Bagels & Sandwiches"
     items:
-      - name: "Kieler Lachs Bagel"
-        description: "Frischkäse, Räucherlachs, rote Zwiebeln, Dill"
-        price: "8.90"
+      - name: "Bagel Bread Auswahl"
+        description: "Alle Bagels wählbar mit Sesam, Lauge oder Mohn"
+        price: "inklusive"
+        tags: []
+      - name: "Cheddar"
+        description: "Frischkäse, Tomate, Gurke, Salat"
+        price: "8.00"
+        tags: ["vegetarisch"]
+      - name: "Lachs Avocado"
+        description: "Lachs, Avocado, Frischkäse, Salat"
+        price: "8.50"
         tags: ["pescetarisch"]
-      - name: "Veggie Garten Bagel"
-        description: "Hummus, Avocado, Gurke, Sprossen"
-        price: "7.90"
-        tags: ["vegan"]
-      - name: "Roastbeef Deluxe"
-        description: "Roastbeef, Senf-Creme, Rucola, Gewürzgurken"
-        price: "9.50"
+      - name: "Chicken Mozzarella"
+        description: "Hähnchenaufschnitt, Mozzarella, Gurke, Aioli, Salat"
+        price: "8.00"
+        tags: []
+      - name: "Tuna Gouda"
+        description: "Thunfisch, Gouda, Aioli, Sriracha-Mayo, Salat"
+        price: "8.00"
+        tags: ["pescetarisch"]
+      - name: "Chicken Fajita"
+        description: "Chicken-Fajita Style, Gouda, Aioli, Salat"
+        price: "8.00"
+        tags: []
+      - name: "Caprese"
+        description: "Tomate, Mozzarella, Balsamico, Rucola, Pesto"
+        price: "8.00"
+        tags: ["vegetarisch"]
+      - name: "Zaatar"
+        description: "Thymianmix, Frischkäse, Tomate, Gurke, Salat"
+        price: "7.00"
+        tags: ["vegetarisch"]
+      - name: "Avocado"
+        description: "Avocado, Frischkäse, Tomate, Salat"
+        price: "7.50"
+        tags: ["vegetarisch"]
+      - name: "Eggdrop Sandwich"
+        description: "Brioche, Käse, Rührei, Sriracha-Mayo"
+        price: "8.00"
+        tags: ["vegetarisch"]
+      - name: "Extra: Avocado"
+        description: "Zusatz-Topping"
+        price: "+1.00"
+        tags: []
+      - name: "Extra: Pastirma"
+        description: "Luftgetrockneter Rinderschinken"
+        price: "+2.00"
         tags: []
 
   - title: "Kaffee & Heißgetränke"
     items:
       - name: "Espresso"
         description: "Kräftig und aromatisch"
-        price: "2.40"
+        price: "2.50"
         tags: ["vegan"]
+      - name: "Americano"
+        description: "Espresso mit heißem Wasser"
+        price: "3.00"
+        tags: ["vegan"]
+      - name: "Flat White"
+        description: "Doppio Espresso mit cremiger Milch"
+        price: "4.50"
+        tags: ["vegetarisch"]
       - name: "Cappuccino"
         description: "Mit feinporigem Milchschaum"
-        price: "3.60"
-        tags: ["vegetarisch"]
-      - name: "Hafermilch Latte"
-        description: "Doppio Espresso mit Hafermilch"
         price: "4.20"
-        tags: ["vegan"]
+        tags: ["vegetarisch"]
+      - name: "Café Latte"
+        description: "Milder Milchkaffee"
+        price: "4.80"
+        tags: ["vegetarisch"]
+      - name: "Heiße Schokolade"
+        description: "Schokoladig und cremig"
+        price: "4.80"
+        tags: ["vegetarisch"]
+      - name: "Chai Latte"
+        description: "Gewürztee mit Milch"
+        price: "4.20"
+        tags: ["vegetarisch"]
+      - name: "Matcha"
+        description: "Japanischer Grüntee Latte"
+        price: "4.80"
+        tags: ["vegetarisch"]
+      - name: "Iced Matcha mit Sirup"
+        description: "Kalt serviert, optional mit Sirup"
+        price: "5.00"
+        tags: ["vegetarisch"]
+      - name: "Optionen für Milch"
+        description: "Kuhmilch, Hafermilch oder Kokosmilch"
+        price: "inklusive"
+        tags: []
+      - name: "Sirup-Auswahl"
+        description: "Karamell, Vanille, Haselnuss"
+        price: "+0.50"
+        tags: []
+      - name: "Extra Shot"
+        description: "Zusätzlicher Espresso-Shot"
+        price: "+0.50"
+        tags: []
+      - name: "Auf Eis"
+        description: "Alle Getränke auch als Iced-Variante"
+        price: "inklusive"
+        tags: []
 
   - title: "Kaltgetränke"
     items:
-      - name: "Hausgemachte Zitronenlimonade"
-        description: "Frisch gepresste Zitrone, Minze"
-        price: "3.90"
+      - name: "Viva con Agua"
+        description: "Mineralwasser still oder laut"
+        price: "2.50"
         tags: ["vegan"]
-      - name: "Eiskaffee"
-        description: "Cold Brew, Eiswürfel, optional Milch"
-        price: "4.40"
-        tags: ["vegetarisch"]
+      - name: "Fritz Limo"
+        description: "Verschiedene Sorten je nach Verfügbarkeit"
+        price: "3.50"
+        tags: ["vegan"]
 
   - title: "Gebäck & Süßes"
     items:
-      - name: "Cinnamon Roll"
-        description: "Hausgemacht, warm serviert"
-        price: "3.80"
+      - name: "Zimtschnecke"
+        description: "Täglich verschiedene Sorten"
+        price: "s. Auslage"
         tags: ["vegetarisch"]
-      - name: "Banana Bread"
-        description: "Saftig, mit Walnuss und Zimt"
-        price: "3.50"
+      - name: "Stück Kuchen"
+        description: "Nur am Wochenende, wechselnde Auswahl"
+        price: "s. Auslage"
         tags: ["vegetarisch"]
 
   - title: "Specials / Saisonales"
     items:
-      - name: "Frühlings-Bagel"
-        description: "Ziegenkäse, Honig, karamellisierte Walnuss"
-        price: "9.20"
-        tags: ["vegetarisch"]
+      - name: "Saisonale Specials"
+        description: "Regelmäßig wechselnde Angebote – bitte vor Ort oder auf Instagram prüfen"
+        price: "tagesaktuell"
+        tags: []

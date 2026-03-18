@@ -23,9 +23,6 @@ def create_app(config_class: type[Config] = Config) -> Flask:
 
     app.config["BUSINESS_INFO"] = load_yaml(app.config["BUSINESS_DATA_FILE"])
     app.config["MENU_ITEMS"] = load_yaml(app.config["MENU_DATA_FILE"])
-    app.config["CATERING_MENU_ITEMS"] = load_yaml(
-        app.config["CATERING_DATA_FILE"]
-    )
 
     app.register_blueprint(main_bp)
     app.register_blueprint(menu_bp)

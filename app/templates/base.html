@@ -40,7 +40,10 @@
 <body class="bg-cream text-stone-900 min-h-screen flex flex-col">
     <header class="bg-white/90 backdrop-blur border-b border-stone-200 sticky top-0 z-40">
         <nav class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="{{ url_for('main.index') }}" class="text-xl font-semibold text-coffee">Don's Café & Bistro</a>
+            <a href="{{ url_for('main.index') }}" class="flex items-center gap-3 text-xl font-semibold text-coffee">
+                <img src="{{ url_for('static', filename='images/donsLogo.jpg') }}" alt="Don's Café & Bistro Logo" class="h-10 w-10 rounded-full object-cover border border-stone-200">
+                <span>Don's Café & Bistro</span>
+            </a>
             <ul class="flex flex-wrap gap-4 text-sm md:text-base">
                 <li><a class="hover:text-terracotta" href="{{ url_for('main.index') }}">Start</a></li>
                 <li><a class="hover:text-terracotta" href="{{ url_for('main.about') }}">Über uns</a></li>
@@ -70,6 +73,7 @@
         <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8 text-sm">
             <div>
                 <h2 class="font-semibold mb-2">{{ business.name }}</h2>
+                <img src="{{ url_for('static', filename='images/donsLogo.jpg') }}" alt="Don's Café & Bistro Logo" class="h-14 w-14 rounded-full object-cover border border-stone-700 mb-3">
                 <p>{{ business.address }}</p>
                 <p><a class="underline" href="tel:{{ business.phone|replace(' ', '') }}">{{ business.phone }}</a></p>
             </div>
