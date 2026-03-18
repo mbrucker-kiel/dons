@@ -11,9 +11,9 @@ def test_build_order_items_and_total():
         data = app.config["MENU_ITEMS"]
         items = build_order_items(
             {
-                "bagel_1_qty": 2,
-                "bagel_1_type": "Cheddar",
-                "bagel_1_bread": "Sesam",
+                "bagel_rows_json": json.dumps([
+                    {"qty": 2, "type": "Cheddar", "bread": "Sesam"},
+                ]),
                 "zimtschnecke_qty": 1,
                 "zimtschnecke_type": "Classic",
             },

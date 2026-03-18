@@ -1,12 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-10px); }
+}
+.bagel-row-enter { animation: slideIn 0.3s ease forwards; }
+.bagel-row-leave { animation: slideOut 0.3s ease forwards; }
+</style>
+
 <section class="max-w-6xl mx-auto px-4 py-12">
     <h1 class="text-4xl font-semibold text-coffee">Catering bestellen</h1>
     <p class="mt-2 text-stone-700">Bitte füllen Sie alle Pflichtfelder aus. Es handelt sich um eine Abholbestellung.</p>
 
     <form method="post" id="catering-order-form" class="mt-8 grid lg:grid-cols-3 gap-8">
         {{ form.hidden_tag() }}
+        <input type="hidden" name="bagel_rows_json" id="bagel-rows-json" value="">
 
         <div class="lg:col-span-2 space-y-6">
             <section class="bg-white border border-stone-200 rounded-2xl p-6">
@@ -54,30 +68,23 @@
             <section class="bg-white border border-stone-200 rounded-2xl p-6">
                 <h2 class="text-xl font-semibold mb-4">Positionen</h2>
                 <p class="text-sm text-stone-600 mb-4">Auswahl basiert auf Ihrer Speisekarte: Bagels, Zimtschnecken und Kuchen.</p>
-                <div class="grid md:grid-cols-2 gap-4">
-                    <label class="text-sm">{{ form.bagel_1_qty.label }}{{ form.bagel_1_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
-                    <label class="text-sm">{{ form.bagel_1_type.label }}{{ form.bagel_1_type(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
-                    <label class="text-sm">{{ form.bagel_1_bread.label }}{{ form.bagel_1_bread(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
-                    <div></div>
-                    <label class="text-sm">{{ form.bagel_2_qty.label }}{{ form.bagel_2_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
-                    <label class="text-sm">{{ form.bagel_2_type.label }}{{ form.bagel_2_type(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
-                    <label class="text-sm">{{ form.bagel_2_bread.label }}{{ form.bagel_2_bread(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
-                    <div></div>
-                    <label class="text-sm">{{ form.bagel_3_qty.label }}{{ form.bagel_3_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
-                    <label class="text-sm">{{ form.bagel_3_type.label }}{{ form.bagel_3_type(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
-                    <label class="text-sm">{{ form.bagel_3_bread.label }}{{ form.bagel_3_bread(class_='mt-1 w-full border rounded-lg px-3 py-2') }}</label>
-                    <div></div>
+
+                <div id="bagel-rows-container" class="space-y-3 mb-3"></div>
+
+                <button type="button" id="add-bagel-row"
+                    class="mt-1 flex items-center gap-2 text-sm font-medium text-olive-700 border border-dashed border-olive-400 rounded-lg px-4 py-2 hover:bg-olive-50 transition-colors"
+                    style="color: #6b7c44; border-color: #8fa44e;">
+                    <span class="text-lg leading-none">+</span> Weitere Bagel-Auswahl hinzufügen
+                </button>
+
+                {% for e in form.bagel_rows_json.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
+
+                <div class="grid md:grid-cols-2 gap-4 mt-6 pt-4 border-t border-stone-100">
                     <label class="text-sm">{{ form.zimtschnecke_qty.label }}{{ form.zimtschnecke_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
                     <label class="text-sm">{{ form.zimtschnecke_type.label }}{{ form.zimtschnecke_type(class_='mt-1 w-full border rounded-lg px-3 py-2', placeholder='z. B. Classic, Pistazie, Schoko') }}</label>
                     <label class="text-sm">{{ form.kuchen_qty.label }}{{ form.kuchen_qty(class_='mt-1 w-full border rounded-lg px-3 py-2', min='0') }}</label>
                     <label class="text-sm">{{ form.kuchen_type.label }}{{ form.kuchen_type(class_='mt-1 w-full border rounded-lg px-3 py-2', placeholder='z. B. Cheesecake, Karotte, Schoko') }}</label>
                 </div>
-                {% for e in form.bagel_1_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
-                {% for e in form.bagel_1_bread.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
-                {% for e in form.bagel_2_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
-                {% for e in form.bagel_2_bread.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
-                {% for e in form.bagel_3_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
-                {% for e in form.bagel_3_bread.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
                 {% for e in form.zimtschnecke_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
                 {% for e in form.kuchen_type.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
                 {% for e in form.submit.errors %}<p class="text-red-700 text-sm mt-2">{{ e }}</p>{% endfor %}
@@ -85,7 +92,7 @@
 
             <section class="bg-white border border-stone-200 rounded-2xl p-6">
                 <h2 class="text-xl font-semibold mb-4">Hinweise</h2>
-                <p class="text-sm text-stone-600 mb-2">Weitere Wünsche (z. B. Verteilung mehrerer Bagel-Typen) bitte hier eintragen.</p>
+                <p class="text-sm text-stone-600 mb-2">Weitere Wünsche bitte hier eintragen.</p>
                 <label class="text-sm">{{ form.special_requests.label }}</label>
                 {{ form.special_requests(class_='mt-1 w-full border rounded-lg px-3 py-2 min-h-32') }}
             </section>
@@ -124,9 +131,41 @@
         </aside>
     </form>
 </section>
+
+<template id="bagel-row-template">
+    <div class="bagel-row bagel-row-enter bg-stone-50 border border-stone-200 rounded-xl p-4">
+        <div class="grid md:grid-cols-[80px_1fr_1fr_auto] gap-3 items-end">
+            <label class="text-sm">
+                <span class="block text-stone-600 mb-1">Anzahl</span>
+                <input type="number" class="bagel-qty w-full border rounded-lg px-3 py-2" value="1" min="1" max="200">
+            </label>
+            <label class="text-sm">
+                <span class="block text-stone-600 mb-1">Bagel-Typ</span>
+                <select class="bagel-type w-full border rounded-lg px-3 py-2"></select>
+            </label>
+            <label class="text-sm">
+                <span class="block text-stone-600 mb-1">Brotart</span>
+                <select class="bagel-bread w-full border rounded-lg px-3 py-2">
+                    <option value="">Bitte wählen</option>
+                    <option value="Sesam">Sesam</option>
+                    <option value="Lauge">Lauge</option>
+                    <option value="Mohn">Mohn</option>
+                    <option value="Gemischt">Gemischt</option>
+                </select>
+            </label>
+            <button type="button" class="bagel-remove self-end mb-0.5 text-stone-400 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-50" title="Zeile entfernen">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</template>
+
 <script>
 window.cateringConfig = {
-    bagelPrices: {{ bagel_prices|tojson }}
+    bagelPrices: {{ bagel_prices|tojson }},
+    bagelChoices: {{ bagel_choices|tojson }}
 };
 </script>
 {% endblock %}

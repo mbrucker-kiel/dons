@@ -17,9 +17,64 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const bagelPrices = window.cateringConfig.bagelPrices || {};
+    const bagelChoices = window.cateringConfig.bagelChoices || [];
     const summaryList = document.getElementById("order-summary-list");
     const summaryTotal = document.getElementById("order-summary-total");
     const summaryEmpty = document.getElementById("order-summary-empty");
+    const container = document.getElementById("bagel-rows-container");
+    const addBtn = document.getElementById("add-bagel-row");
+    const rowTemplate = document.getElementById("bagel-row-template");
+    const bagelsJsonInput = document.getElementById("bagel-rows-json");
+
+    const MAX_BAGEL_ROWS = 20;
+
+    function populateTypeSelect(select) {
+        select.innerHTML = "";
+        bagelChoices.forEach(({ value, label }) => {
+            const opt = document.createElement("option");
+            opt.value = value;
+            opt.textContent = label;
+            select.appendChild(opt);
+        });
+    }
+
+    function addBagelRow() {
+        if (container.querySelectorAll(".bagel-row").length >= MAX_BAGEL_ROWS) {
+            return;
+        }
+        const clone = rowTemplate.content.cloneNode(true);
+        const row = clone.querySelector(".bagel-row");
+
+        populateTypeSelect(row.querySelector(".bagel-type"));
+
+        row.querySelector(".bagel-remove").addEventListener("click", () => removeBagelRow(row));
+        row.querySelector(".bagel-qty").addEventListener("input", updateSummary);
+        row.querySelector(".bagel-type").addEventListener("change", updateSummary);
+        row.querySelector(".bagel-bread").addEventListener("change", updateSummary);
+
+        container.appendChild(row);
+        updateSummary();
+        updateAddButton();
+    }
+
+    function removeBagelRow(row) {
+        if (container.querySelectorAll(".bagel-row").length <= 1) {
+            return;
+        }
+        row.classList.remove("bagel-row-enter");
+        row.classList.add("bagel-row-leave");
+        row.addEventListener("animationend", () => {
+            row.remove();
+            updateSummary();
+            updateAddButton();
+        }, { once: true });
+    }
+
+    function updateAddButton() {
+        if (addBtn) {
+            addBtn.disabled = container.querySelectorAll(".bagel-row").length >= MAX_BAGEL_ROWS;
+        }
+    }
 
     const parseQty = (name) => {
         const element = form.querySelector(`[name='${name}']`);
@@ -59,13 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
         let total = 0;
         let count = 0;
 
-        [1, 2, 3].forEach((index) => {
-            const qty = parseQty(`bagel_${index}_qty`);
+        container.querySelectorAll(".bagel-row").forEach((row) => {
+            const qtyInput = row.querySelector(".bagel-qty");
+            const typeSelect = row.querySelector(".bagel-type");
+            const breadSelect = row.querySelector(".bagel-bread");
+            const qty = qtyInput ? Math.max(0, Number(qtyInput.value || 0)) : 0;
             if (qty <= 0) {
                 return;
             }
-            const type = readValue(`bagel_${index}_type`) || "Bagel";
-            const bread = readValue(`bagel_${index}_bread`);
+            const type = typeSelect ? String(typeSelect.value || "").trim() || "Bagel" : "Bagel";
+            const bread = breadSelect ? String(breadSelect.value || "").trim() : "";
             const unitPrice = Number(bagelPrices[type] || 0);
             const lineTotal = unitPrice * qty;
             const label = bread
@@ -99,7 +157,37 @@ document.addEventListener("DOMContentLoaded", () => {
         summaryTotal.textContent = `${total.toFixed(2)} €`;
     };
 
+    function serializeBagelRows() {
+        const rows = [];
+        container.querySelectorAll(".bagel-row").forEach((row) => {
+            const qtyInput = row.querySelector(".bagel-qty");
+            const typeSelect = row.querySelector(".bagel-type");
+            const breadSelect = row.querySelector(".bagel-bread");
+            const qty = qtyInput ? Math.max(0, Number(qtyInput.value || 0)) : 0;
+            if (qty <= 0) {
+                return;
+            }
+            rows.push({
+                qty: qty,
+                type: typeSelect ? String(typeSelect.value || "").trim() : "",
+                bread: breadSelect ? String(breadSelect.value || "").trim() : "",
+            });
+        });
+        return rows;
+    }
+
+    form.addEventListener("submit", () => {
+        if (bagelsJsonInput) {
+            bagelsJsonInput.value = JSON.stringify(serializeBagelRows());
+        }
+    });
+
     form.addEventListener("input", updateSummary);
     form.addEventListener("change", updateSummary);
-    updateSummary();
+
+    if (addBtn) {
+        addBtn.addEventListener("click", addBagelRow);
+    }
+
+    addBagelRow();
 });
