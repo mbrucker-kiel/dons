@@ -7,5 +7,10 @@ services:
     env_file:
       - .env
     volumes:
-      # Persist the SQLite database across container restarts
-      - ./data:/app/instance
+      # YAML data files (business info, menu) — editable on host
+      - ./data:/app/data
+      # SQLite database — persisted in a named Docker volume
+      - dons_instance:/app/instance
+
+volumes:
+  dons_instance:
