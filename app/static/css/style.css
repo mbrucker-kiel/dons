@@ -20,3 +20,83 @@ select:focus {
     outline: 2px solid #C2703E;
     outline-offset: 2px;
 }
+
+@keyframes owner-join-left {
+    0% {
+        opacity: 0;
+        transform: translateX(-38px) translateY(10px) scale(0.96);
+    }
+    65% {
+        opacity: 1;
+        transform: translateX(4px) translateY(0) scale(1.01);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) translateY(0) scale(1);
+    }
+}
+
+@keyframes owner-float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.contact-owner-floating {
+    position: fixed;
+    left: 1.2rem;
+    bottom: 1rem;
+    z-index: 30;
+    pointer-events: none;
+    animation: owner-join-left 850ms ease-out both;
+}
+
+.contact-owner-floating-image {
+    display: block;
+    width: min(24vw, 280px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.24));
+    animation: owner-float 4.6s ease-in-out 900ms infinite;
+}
+
+@media (max-width: 1200px) {
+    .contact-owner-floating-image {
+        width: min(28vw, 230px);
+    }
+}
+
+@media (max-width: 900px) {
+    .contact-owner-floating {
+        left: 0.7rem;
+        bottom: 0.5rem;
+    }
+
+    .contact-owner-floating-image {
+        width: min(34vw, 180px);
+        opacity: 0.95;
+    }
+}
+
+@media (max-width: 600px) {
+    .contact-owner-floating {
+        left: 0.4rem;
+        bottom: 0.25rem;
+    }
+
+    .contact-owner-floating-image {
+        width: min(38vw, 150px);
+        opacity: 0.9;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-owner-floating,
+    .contact-owner-floating-image {
+        animation: none;
+    }
+}
