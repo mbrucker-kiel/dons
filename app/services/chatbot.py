@@ -60,7 +60,7 @@ def chat(
     business_info: dict | None = None,
     menu_items: dict | None = None,
     base_url: str = "http://localhost:11434",
-    model: str = "phi4-mini:latest",
+    model: str = "gpt-oss:20b",
 ) -> str:
     """Sendet eine Nachricht an den Ollama-Server und gibt die bereinigte Antwort zurück."""
     url = f"{base_url}/api/chat"
