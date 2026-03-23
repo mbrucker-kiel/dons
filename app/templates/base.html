@@ -91,6 +91,123 @@
             </div>
         </div>
     </footer>
+    <!-- Chat-Widget -->
+    <div id="chat-widget" class="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2">
+        <div id="chat-box" class="hidden flex-col w-80 sm:w-96 bg-cream rounded-2xl shadow-2xl border border-stone-200 overflow-hidden" style="height:420px;">
+            <div class="flex items-center justify-between px-4 py-3" style="background-color:#C2703E;">
+                <span class="text-white font-semibold text-sm">💬 Don's Café Assistent</span>
+                <button id="chat-close-btn" class="text-white text-lg leading-none hover:opacity-75" aria-label="Chat schließen">✕</button>
+            </div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm bg-cream" style="height:300px;"></div>
+            <div class="flex border-t border-stone-200 bg-white">
+                <input id="chat-input" type="text" placeholder="Frage stellen …"
+                    class="flex-1 px-3 py-2 text-sm outline-none bg-transparent"
+                    aria-label="Nachricht eingeben">
+                <button id="chat-send-btn"
+                    class="px-4 py-2 text-white text-sm font-medium hover:opacity-90 transition"
+                    style="background-color:#C2703E;"
+                    aria-label="Senden">➤</button>
+            </div>
+        </div>
+        <button id="chat-toggle-btn"
+            class="flex items-center gap-2 px-4 py-3 text-white rounded-full shadow-lg font-medium text-sm hover:opacity-90 transition"
+            style="background-color:#C2703E;"
+            aria-label="Chat öffnen">
+            💬 Chat
+        </button>
+    </div>
+
+    <script>
+    (function () {
+        const toggleBtn = document.getElementById('chat-toggle-btn');
+        const closeBtn = document.getElementById('chat-close-btn');
+        const chatBox = document.getElementById('chat-box');
+        const messagesDiv = document.getElementById('chat-messages');
+        const input = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('chat-send-btn');
+
+        function openChat() {
+            chatBox.classList.remove('hidden');
+            chatBox.classList.add('flex');
+            input.focus();
+        }
+
+        function closeChat() {
+            chatBox.classList.add('hidden');
+            chatBox.classList.remove('flex');
+        }
+
+        toggleBtn.addEventListener('click', function () {
+            chatBox.classList.contains('hidden') ? openChat() : closeChat();
+        });
+
+        closeBtn.addEventListener('click', closeChat);
+
+        function appendMessage(sender, text, isBot) {
+            const wrapper = document.createElement('div');
+            wrapper.className = isBot
+                ? 'flex gap-2 items-start'
+                : 'flex gap-2 items-start justify-end';
+
+            const bubble = document.createElement('div');
+            bubble.className = isBot
+                ? 'rounded-2xl rounded-tl-none px-3 py-2 max-w-[85%] text-stone-800 shadow-sm'
+                : 'rounded-2xl rounded-tr-none px-3 py-2 max-w-[85%] text-white shadow-sm';
+            bubble.style.backgroundColor = isBot ? '#f5ede5' : '#C2703E';
+            bubble.textContent = text;
+
+            wrapper.appendChild(bubble);
+            messagesDiv.appendChild(wrapper);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const msg = input.value.trim();
+            if (!msg) return;
+            appendMessage('Du', msg, false);
+            input.value = '';
+            sendBtn.disabled = true;
+            input.disabled = true;
+
+            const loadingEl = document.createElement('div');
+            loadingEl.className = 'flex gap-2 items-start';
+            loadingEl.innerHTML = '<div class="rounded-2xl rounded-tl-none px-3 py-2 text-stone-500 text-xs shadow-sm" style="background-color:#f5ede5;">…</div>';
+            loadingEl.id = 'chat-loading';
+            messagesDiv.appendChild(loadingEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg })
+                });
+                const loading = document.getElementById('chat-loading');
+                if (loading) loading.remove();
+                if (!res.ok) {
+                    appendMessage('Bot', 'Serverfehler – bitte versuche es später erneut.', true);
+                } else {
+                    const data = await res.json();
+                    appendMessage('Bot', data.reply || data.error || 'Keine Antwort.', true);
+                }
+            } catch (err) {
+                const loading = document.getElementById('chat-loading');
+                if (loading) loading.remove();
+                appendMessage('Bot', 'Verbindungsfehler – bitte versuche es später erneut.', true);
+            } finally {
+                sendBtn.disabled = false;
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    })();
+    </script>
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
