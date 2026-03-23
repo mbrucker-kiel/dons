@@ -6,6 +6,8 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       # YAML data files (business info, menu) — editable on host
       - ./data:/app/data
