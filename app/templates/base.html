@@ -98,13 +98,14 @@
         </div>
     </footer>
     <!-- Chat-Widget -->
-    <div id="chat-widget" class="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2">
-        <div id="chat-box" class="hidden flex-col w-80 sm:w-96 bg-cream rounded-2xl shadow-2xl border border-stone-200 overflow-hidden" style="height:420px;">
+    <div id="chat-widget" class="fixed bottom-5 left-5 z-50 flex flex-col items-start gap-2">
+        <div id="chat-box" class="hidden flex-col bg-cream rounded-2xl shadow-2xl border border-stone-200 overflow-hidden"
+             style="width: min(92vw, 26rem); height: clamp(320px, 60vh, 480px);">
             <div class="flex items-center justify-between px-4 py-3" style="background-color:#C2703E;">
                 <span class="text-white font-semibold text-sm">💬 Don's Café Assistent</span>
                 <button id="chat-close-btn" class="text-white text-lg leading-none hover:opacity-75" aria-label="Chat schließen">✕</button>
             </div>
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm bg-cream" style="height:300px;"></div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm bg-cream"></div>
             <div class="flex border-t border-stone-200 bg-white">
                 <input id="chat-input" type="text" placeholder="Frage stellen …"
                     class="flex-1 px-3 py-2 text-sm outline-none bg-transparent"
@@ -126,11 +127,12 @@
                         border-top:8px solid white;"></div>
         </div>
         <button id="chat-toggle-btn" aria-label="Chat öffnen"
-            class="rounded-full shadow-lg hover:scale-105 transition-transform focus:outline-none"
-            style="width:75px; height:75px; padding:0; background:transparent; border:none; cursor:pointer;">
+            class="hover:scale-105 transition-transform focus:outline-none"
+            style="width:90px; height:auto; padding:0; background:transparent; border:none; cursor:pointer;">
             <img src="{{ url_for('static', filename='images/don.png') }}"
                  alt="Don's Café Assistent"
-                 class="rounded-full w-full h-full object-cover border-2 border-white shadow">
+                 style="width:90px; height:auto; display:block;"
+                 draggable="false">
         </button>
     </div>
 
