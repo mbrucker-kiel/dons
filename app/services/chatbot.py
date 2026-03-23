@@ -1,7 +1,12 @@
+import logging
 import os
 import re
 
 import requests
+
+logger = logging.getLogger(__name__)
+
+_LLM_TIMEOUT = 30  # seconds
 
 SYSTEM_PROMPT = """Du bist ein freundlicher Assistent für Don's Café & Catering.
 Du beantwortest Fragen zu unserem Menü, Catering-Angeboten, Öffnungszeiten und Bestellungen.
@@ -27,11 +32,40 @@ def chat(user_message: str) -> str:
         "stream": False,
     }
     try:
-        resp = requests.post(url, json=payload, timeout=30)
+        resp = requests.post(url, json=payload, timeout=_LLM_TIMEOUT)
         resp.raise_for_status()
         content = resp.json()["message"]["content"]
         return _strip_think_tags(content)
-    except requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError as exc:
+        logger.warning(
+            "LLM server unreachable at %s (model=%s): %s",
+            url,
+            model,
+            exc,
+        )
         return "Der Chatbot ist gerade nicht verfügbar (LLM-Server nicht erreichbar)."
+    except requests.exceptions.Timeout as exc:
+        logger.warning(
+            "LLM request timed out after %d s (url=%s, model=%s): %s",
+            _LLM_TIMEOUT,
+            url,
+            model,
+            exc,
+        )
+        return "Der Chatbot antwortet gerade nicht (Timeout). Bitte versuche es später erneut."
+    except requests.exceptions.HTTPError as exc:
+        logger.error(
+            "LLM server returned HTTP %s (url=%s, model=%s): %s",
+            exc.response.status_code if exc.response is not None else "unknown",
+            url,
+            model,
+            exc,
+        )
+        return "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut."
     except Exception:
+        logger.exception(
+            "Unexpected error while calling LLM (url=%s, model=%s)",
+            url,
+            model,
+        )
         return "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut."
