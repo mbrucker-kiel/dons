@@ -25,6 +25,12 @@
         }
     </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        @keyframes fadeout {
+            from { opacity: 1; pointer-events: auto; }
+            to   { opacity: 0; pointer-events: none; }
+        }
+    </style>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -109,11 +115,22 @@
                     aria-label="Senden">➤</button>
             </div>
         </div>
-        <button id="chat-toggle-btn"
-            class="flex items-center gap-2 px-4 py-3 text-white rounded-full shadow-lg font-medium text-sm hover:opacity-90 transition"
-            style="background-color:#C2703E;"
-            aria-label="Chat öffnen">
-            💬 Chat
+        <div id="chat-bubble"
+            class="relative bg-white text-stone-800 text-sm rounded-2xl px-4 py-3 shadow-lg max-w-[200px] text-center"
+            style="animation: fadeout 0.5s ease 5s forwards;">
+            Hallo, hast du Fragen? Ich helfe gerne 😊
+            <div style="position:absolute; bottom:-8px; left:50%; transform:translateX(-50%);
+                        width:0; height:0;
+                        border-left:8px solid transparent;
+                        border-right:8px solid transparent;
+                        border-top:8px solid white;"></div>
+        </div>
+        <button id="chat-toggle-btn" aria-label="Chat öffnen"
+            class="rounded-full shadow-lg hover:scale-105 transition-transform focus:outline-none"
+            style="width:75px; height:75px; padding:0; background:transparent; border:none; cursor:pointer;">
+            <img src="{{ url_for('static', filename='images/don.png') }}"
+                 alt="Don's Café Assistent"
+                 class="rounded-full w-full h-full object-cover border-2 border-white shadow">
         </button>
     </div>
 
@@ -129,6 +146,7 @@
         function openChat() {
             chatBox.classList.remove('hidden');
             chatBox.classList.add('flex');
+            hideBubble();
             input.focus();
         }
 
@@ -137,7 +155,13 @@
             chatBox.classList.remove('flex');
         }
 
+        function hideBubble() {
+            const bubble = document.getElementById('chat-bubble');
+            if (bubble) bubble.style.display = 'none';
+        }
+
         toggleBtn.addEventListener('click', function () {
+            hideBubble();
             chatBox.classList.contains('hidden') ? openChat() : closeChat();
         });
 
