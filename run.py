@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+
+load_dotenv()  # load .env before create_app() reads os.environ
+
 from app import create_app
 
 
