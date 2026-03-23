@@ -28,3 +28,6 @@ class Config:
 
     BUSINESS_DATA_FILE = BASE_DIR / "data" / "business.yaml"
     MENU_DATA_FILE = BASE_DIR / "data" / "menu.yaml"
+
+    OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "deepseek-r1:8b")

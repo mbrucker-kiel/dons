@@ -6,6 +6,7 @@ from .config import Config
 from .extensions import csrf, db, mail
 from .routes.admin import admin_bp
 from .routes.catering import catering_bp
+from .routes.chatbot import chatbot_bp
 from .routes.main import main_bp
 from .routes.menu import menu_bp
 from .utils.data_loader import load_yaml
@@ -28,6 +29,7 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     app.register_blueprint(menu_bp)
     app.register_blueprint(catering_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(chatbot_bp)
 
     with app.app_context():
         db.create_all()
