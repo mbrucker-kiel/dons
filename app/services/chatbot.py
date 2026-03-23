@@ -1,5 +1,4 @@
 import logging
-import os
 import re
 
 import requests
@@ -60,10 +59,10 @@ def chat(
     user_message: str,
     business_info: dict | None = None,
     menu_items: dict | None = None,
+    base_url: str = "http://localhost:11434",
+    model: str = "phi4-mini:latest",
 ) -> str:
     """Sendet eine Nachricht an den Ollama-Server und gibt die bereinigte Antwort zurück."""
-    base_url = os.environ.get("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
-    model = os.environ.get("OLLAMA_MODEL", "deepseek-r1:8b")
     url = f"{base_url}/api/chat"
     system_prompt = build_system_prompt(business_info, menu_items)
     payload = {

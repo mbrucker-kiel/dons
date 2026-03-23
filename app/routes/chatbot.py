@@ -17,5 +17,7 @@ def chatbot_endpoint():
         user_message,
         business_info=current_app.config.get("BUSINESS_INFO"),
         menu_items=current_app.config.get("MENU_ITEMS"),
+        base_url=current_app.config["OLLAMA_BASE_URL"],
+        model=current_app.config["OLLAMA_MODEL"],
     )
     return jsonify({"reply": reply})
