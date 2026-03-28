@@ -59,11 +59,12 @@
 </section>
 
 <div class="contact-owner-floating" aria-hidden="true">
-    <img
-        src="{{ url_for('static', filename='images/don.png') }}"
-        alt=""
-        class="contact-owner-floating-image"
-        loading="lazy"
-    >
+    <div class="contact-owner-floating-image">
+        <img
+            src="{{ url_for('static', filename='images/don.png') }}"
+            alt=""
+            loading="lazy"
+        >
+    </div>
 </div>
 {% endblock %}

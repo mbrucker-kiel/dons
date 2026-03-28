@@ -25,6 +25,12 @@
         }
     </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        @keyframes fadeout {
+            from { opacity: 1; pointer-events: auto; }
+            to   { opacity: 0; pointer-events: none; }
+        }
+    </style>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -92,13 +98,17 @@
         </div>
     </footer>
     <!-- Chat-Widget -->
-    <div id="chat-widget" class="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2">
-        <div id="chat-box" class="hidden flex-col w-80 sm:w-96 bg-cream rounded-2xl shadow-2xl border border-stone-200 overflow-hidden" style="height:420px;">
+    <div id="chat-widget" class="fixed bottom-5 left-5 z-50 flex flex-col items-start gap-2">
+        <div id="chat-box" class="hidden flex-col bg-cream rounded-2xl shadow-2xl border border-stone-200 overflow-hidden"
+             style="width: min(92vw, 26rem); height: clamp(320px, 60vh, 480px);">
             <div class="flex items-center justify-between px-4 py-3" style="background-color:#C2703E;">
                 <span class="text-white font-semibold text-sm">💬 Don's Café Assistent</span>
                 <button id="chat-close-btn" class="text-white text-lg leading-none hover:opacity-75" aria-label="Chat schließen">✕</button>
             </div>
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm bg-cream" style="height:300px;"></div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm bg-cream"></div>
+            <div class="px-3 py-2 text-xs text-stone-500 bg-stone-50 border-t border-stone-200 leading-snug">
+                ⚠️ KI-Assistent – Antworten können Fehler enthalten. Es werden keine Gesprächsdaten gespeichert.
+            </div>
             <div class="flex border-t border-stone-200 bg-white">
                 <input id="chat-input" type="text" placeholder="Frage stellen …"
                     class="flex-1 px-3 py-2 text-sm outline-none bg-transparent"
@@ -109,11 +119,23 @@
                     aria-label="Senden">➤</button>
             </div>
         </div>
-        <button id="chat-toggle-btn"
-            class="flex items-center gap-2 px-4 py-3 text-white rounded-full shadow-lg font-medium text-sm hover:opacity-90 transition"
-            style="background-color:#C2703E;"
-            aria-label="Chat öffnen">
-            💬 Chat
+        <div id="chat-bubble"
+            class="relative bg-white text-stone-800 text-sm rounded-2xl px-4 py-3 shadow-lg max-w-[200px] text-center"
+            style="animation: fadeout 0.5s ease 5s forwards;">
+            Hallo, hast du Fragen? Ich helfe gerne 😊
+            <div style="position:absolute; bottom:-8px; left:50%; transform:translateX(-50%);
+                        width:0; height:0;
+                        border-left:8px solid transparent;
+                        border-right:8px solid transparent;
+                        border-top:8px solid white;"></div>
+        </div>
+        <button id="chat-toggle-btn" aria-label="Chat öffnen"
+            class="hover:scale-105 transition-transform focus:outline-none"
+            style="width:90px; height:auto; padding:0; background:transparent; border:none; cursor:pointer;">
+            <img src="{{ url_for('static', filename='images/don.png') }}"
+                 alt="Don's Café Assistent"
+                 style="width:90px; height:auto; display:block;"
+                 draggable="false">
         </button>
     </div>
 
@@ -129,6 +151,7 @@
         function openChat() {
             chatBox.classList.remove('hidden');
             chatBox.classList.add('flex');
+            hideBubble();
             input.focus();
         }
 
@@ -137,7 +160,13 @@
             chatBox.classList.remove('flex');
         }
 
+        function hideBubble() {
+            const bubble = document.getElementById('chat-bubble');
+            if (bubble) bubble.style.display = 'none';
+        }
+
         toggleBtn.addEventListener('click', function () {
+            hideBubble();
             chatBox.classList.contains('hidden') ? openChat() : closeChat();
         });
 

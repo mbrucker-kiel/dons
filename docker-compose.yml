@@ -6,6 +6,11 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    extra_hosts:
+      # Only needed when Ollama runs on the same machine as Docker (Scenario B).
+      # On Linux, host.docker.internal is not added automatically; this mapping provides it.
+      # Safe to keep even when Ollama is on a separate machine (has no effect).
+      - "host.docker.internal:host-gateway"
     volumes:
       # YAML data files (business info, menu) — editable on host
       - ./data:/app/data
